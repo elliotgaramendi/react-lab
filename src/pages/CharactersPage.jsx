@@ -1,8 +1,18 @@
+import { useEffect } from 'react';
+import CharacterCard from '../components/modules/character/CharacterCard';
+import { useCharactersStore } from '../stores/useCharactersStore';
+
 const CharactersPage = () => {
+  const { characters, isLoading, error, fetchCharacters } = useCharactersStore();
+
+  useEffect(() => {
+    fetchCharacters();
+  }, [fetchCharacters]);
+
   return (
-    <article className="py-5">
-      <div className="container">
-        <header className="text-center">
+    <>
+      <header className="py-4 text-center">
+        <div className="container">
           <h1 className="display-5 fw-bold">
             <i className="bi bi-people-fill me-2"></i>
             Personajes de Rick and Morty
@@ -10,20 +20,55 @@ const CharactersPage = () => {
           <p className="lead text-muted">
             Explora el universo de personajes
           </p>
-        </header>
+        </div>
+      </header>
 
-        <section className="alert alert-info border-0 shadow-sm">
-          <div className="d-flex align-items-center gap-3">
-            <i className="bi bi-info-circle fs-3"></i>
-            <div>
-              <h5 className="mb-1">Próximamente</h5>
-              <p className="mb-0">Aquí irá el listado completo de personajes con filtros y búsqueda</p>
+      <section className="py-4">
+        <div className="container">
+
+          {isLoading && (
+            <div className="text-center py-5">
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Cargando...</span>
+              </div>
             </div>
-          </div>
-        </section>
-      </div>
-    </article>
+          )}
+
+          {error && (
+            <div className="alert alert-danger d-flex align-items-center gap-3">
+              <i className="bi bi-exclamation-triangle fs-3"></i>
+              <div>
+                <h5 className="mb-1">Error</h5>
+                <p className="mb-0">{error}</p>
+              </div>
+            </div>
+          )}
+
+          {!isLoading && !error && characters.length > 0 && (
+            <>
+              <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+                {characters.map((character) => (
+                  <div key={character.id} className="col">
+                    <CharacterCard character={character} />
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+
+          {!isLoading && !error && characters.length === 0 && (
+            <div className="alert alert-warning d-flex align-items-center gap-3">
+              <i className="bi bi-search fs-3"></i>
+              <div>
+                <h5 className="mb-1">Sin resultados</h5>
+                <p className="mb-0">No se encontraron personajes con ese nombre</p>
+              </div>
+            </div>
+          )}
+        </div>
+      </section>
+    </>
   );
-}
+};
 
 export default CharactersPage;

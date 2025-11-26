@@ -1,8 +1,8 @@
 import { Link, NavLink } from 'react-router';
 
-function Header() {
+const Header = () => {
   return (
-    <header className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <header className="navbar navbar-expand-lg bg-body-tertiary border-bottom">
       <div className="container-fluid">
         <Link className="navbar-brand fw-bold" to="/">
           <i className="bi bi-stars me-2"></i>
@@ -51,6 +51,6 @@ function Header() {
       </div>
     </header>
   );
-}
+};
 
 export default Header;
